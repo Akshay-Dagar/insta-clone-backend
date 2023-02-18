@@ -9,7 +9,10 @@ const postSchema = mongoose.Schema({
     image: String,
     caption: String,
     userId: String,
-    likes: Number
+    likes: {
+        type: Number,
+        default: 0
+    }
 })
 
 const Post = mongoose.model('Post', postSchema)
