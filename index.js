@@ -63,13 +63,14 @@ app.get(['/','/api/signup'], async (req, res) => {
 app.get('/api/newsfeed', async (_, res) => {
     try {
         const posts = await Post.aggregate([
-            { $sort: { [likes]: -1 } },
+            { $sort: { ['likes']: -1 } },
             { $limit: Number(20) },
         ]);
         // const posts = await Post.find({}, null, {limit: 20}).sort({field: 'likes'})
         res.status(200).json(posts)
     }
     catch (err) {
+        console.log(err);
         res.status(404).json({message: err.message})
     }
 });
