@@ -23,7 +23,7 @@ app.get(['/','/api'], async (_, res) => {
 });
 
 //login
-app.get(['/','/api/login'], async (req, res) => {
+app.post(['/','/api/login'], async (req, res) => {
     try {
         const id = req.body.userId
         const pass = req.body.password
@@ -40,7 +40,7 @@ app.get(['/','/api/login'], async (req, res) => {
 });
 
 //signup
-app.get(['/','/api/signup'], async (req, res) => {
+app.post(['/','/api/signup'], async (req, res) => {
     try {
         const newUser = new User(req.body)
 
@@ -92,8 +92,8 @@ app.post('/api/post', async (req, res) => {
 
 //add comment
 app.post('/api/post/:postId/comment', async (req, res) => {
-    const newComment = new Comment(req.body)
     try {
+        const newComment = new Comment(req.body)
         const savedComment = await newComment.save();
         res.status(201).json(savedComment);
     }
@@ -103,9 +103,9 @@ app.post('/api/post/:postId/comment', async (req, res) => {
 });
 
 //get comments
-app.get('/api/post/:postId/comment', async (_, res) => {
+app.get('/api/post/:postId/comment', async (req, res) => {
     try {
-        const comments = await Comment.find({ postId: postId })
+        const comments = await Comment.find({ postId: req.params.postId })
         res.status(200).json(comments)
     }
     catch (err) {

@@ -6,7 +6,6 @@ const commentSchema = mongoose.Schema({
         default: new Date()
     },
     userId: String,
-    userName: String,
     text: String,
     postId: String
 })
