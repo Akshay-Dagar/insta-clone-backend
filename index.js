@@ -103,7 +103,7 @@ app.post('/api/post/:postId/comment', async (req, res) => {
 });
 
 //get comments
-app.get('/api/post/:postId/comment', async (req, res) => {
+app.get('/api/post/:postId/comment', async (_, res) => {
     try {
         const comments = await Comment.find({ postId: postId })
         res.status(200).json(comments)
