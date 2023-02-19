@@ -57,7 +57,7 @@ app.get('/api/newsfeed', async (_, res) => {
     try {
         const posts = await Post.aggregate([
             { $sort: { ['likes']: -1 } },
-            { $limit: Number(20) },
+            { $limit: Number(1) },
         ]);
         // const posts = await Post.find({}, null, {limit: 20}).sort({field: 'likes'})
         res.status(200).json(posts)
@@ -112,6 +112,17 @@ app.get('/api/post/:postId/comment', async (req, res) => {
         res.status(404).json({message: err.message})
     }
 });
+
+//like a post
+app.get('/api/post/:postId/like', async (req, res) => {
+    try {
+        await Post.updateOne({ postId: req.params.postId }, { $inc: { likes: 1 }})
+        res.status(200)
+    }
+    catch (err) {
+        res.status(404).json({message: err.message})
+    }
+})
 
 //connect to mongo db and run server if connection successful
 mongoose.connect(process.env.MONGODB_CONNECTION_URL)
