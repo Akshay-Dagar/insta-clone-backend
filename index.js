@@ -57,7 +57,7 @@ app.get('/api/newsfeed', async (_, res) => {
     try {
         const posts = await Post.aggregate([
             { $sort: { ['likes']: -1 } },
-            { $limit: Number(1) },
+            { $limit: Number(20) },
         ]);
         // const posts = await Post.find({}, null, {limit: 20}).sort({field: 'likes'})
         res.status(200).json(posts)
@@ -70,7 +70,7 @@ app.get('/api/newsfeed', async (_, res) => {
 //get posts
 app.get('/api/post', async (req, res) => {
     try {
-        const posts = await Post.find({ userId: req.query.userId })
+        const posts = await Post.find({ userId: req.query.userId }, null, {limit: 20})
         res.status(200).json(posts)
     }
     catch (err) {
