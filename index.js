@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 import Post from "./models/post.js";
 import User from "./models/user.js";
 import PostRoutes from './routes/post.js'
+import AuthRoutes from './routes/auth.js'
 
 const app = express();
 app.use(cors());
@@ -16,36 +17,6 @@ dotenv.config();
 app.get(['/','/api'], async (_, res) => {
     try {
         res.send("Greetings from the backend!!!")
-    }
-    catch (err) {
-        res.status(500).json({message: "Something went wrong."})
-    }
-});
-
-//login
-app.post(['/','/api/login'], async (req, res) => {
-    try {
-        const id = req.body.userId
-        const pass = req.body.password
-
-        const user = await User.findOne({ userId: id })
-        if (user.password !== pass) {
-            res.status(401).json({message: "User is not authorized to access the application (Please check your username and password)"})
-        }
-        res.status(200).json(user)
-    }
-    catch (err) {
-        res.status(500).json({message: "Something went wrong."})
-    }
-});
-
-//signup
-app.post(['/','/api/signup'], async (req, res) => {
-    try {
-        const newUser = new User(req.body)
-
-        const savedUser = await newUser.save();
-        res.status(201).json(savedUser);
     }
     catch (err) {
         res.status(500).json({message: "Something went wrong."})
@@ -67,7 +38,8 @@ app.get('/api/newsfeed', async (_, res) => {
     }
 });
 
-app.use("/api/post", PostRoutes);             //Every request to /posts will be routed by PostRoutes now
+app.use("/api/post", PostRoutes);             
+app.use("/api/auth", AuthRoutes);
 
 //connect to mongo db and run server if connection successful
 mongoose.connect(process.env.MONGODB_CONNECTION_URL)
